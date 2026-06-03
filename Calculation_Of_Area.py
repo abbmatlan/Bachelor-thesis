@@ -1,6 +1,8 @@
 #—--------------------------------------------------------------------------------
 # -*- coding: utf-8 -*-
 """
+Last updated on Wed Jun  3 18:35:12 2026
+
 @author: Mathias Landström & Karl Norlander
 """
 
