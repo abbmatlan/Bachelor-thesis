@@ -1,104 +1,141 @@
+# -*- coding: utf-8 -*-
+"""
+Last updated on Wed Jun  3 18:35:12 2026
+
+@author: Mathias Landström & Karl Norlander
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
 # --------------------
-#  DATA
+# DATA
 # --------------------
-halter = pd.read_excel('Reningsgrad, Ptot, BOD och Ntot.xlsx', header=None)
-flöden = pd.read_excel('Flöde_202601010245.xlsx')
+concentrations = pd.read_excel('Reningsgrad, Ptot, BOD och Ntot.xlsx', header=None)
+flows = pd.read_excel('Flöde_202601010245.xlsx')
 
 # --------------------
-# DATAHANTERING
+# DATA PROCESSING
 # --------------------
-ha = halter.iloc[:, 6:]
-P_ut = ha.iloc[0]
-Reningsgrad_P = ha.iloc[1]
-N_ut = ha.iloc[2] # enhet: C = [mg/l]
-Reningsgrad_N = ha.iloc[3]
-fl = flöden.iloc[5:-4]  # direkt trimning
-Datum = fl.iloc[:, 1].astype(str)
-Q = fl.iloc[:, 5]  # flöde [m3/dag]
+ha = concentrations.iloc[:, 6:]
+P_out = ha.iloc[0]
+P_removal_efficiency = ha.iloc[1]
+N_out = ha.iloc[2]  # unit: C = [mg/L]
+N_removal_efficiency = ha.iloc[3]
+
+fl = flows.iloc[5:-4]  # direct trimming
+Date = fl.iloc[:, 1].astype(str)
+Q = fl.iloc[:, 5]  # flow rate [m3/day]
 
 # --------------------
-# RENINGSHALT
+# REMOVAL EFFICIENCY
 # --------------------
-print("medelvärde på reningshalt:",round(np.mean(Reningsgrad_N),2),"%")
+print("Average removal efficiency:", round(np.mean(N_removal_efficiency), 2), "%")
 
 # --------------------
-# FUNKTION: MONTHLY CONCENTRATION
+# FUNCTION: MONTHLY CONCENTRATION
 # --------------------
-def calc_monthly_concentration(N_ut, Reningsgrad_N):
-    return N_ut / (0.01 * (100 - Reningsgrad_N)) # omvandlar utgående halt och %-rening till ingående halt,
-                                                # alltså koncentration. delar mg/l på 
-C_N_månad = calc_monthly_concentration(N_ut, Reningsgrad_N).values
+def calc_monthly_concentration(N_out, N_removal_efficiency):
+    # Converts effluent concentration and % removal efficiency
+    # to influent concentration.
+    return N_out / (0.01 * (100 - N_removal_efficiency))
+
+C_N_month = calc_monthly_concentration(
+    N_out,
+    N_removal_efficiency
+).values
 
 # --------------------
-# MAPPNING AV MÅNAD
+# MONTH MAPPING
 # --------------------
-månader = {
+months = {
     "jan": 1, "feb": 2, "mar": 3, "apr": 4,
-    "maj": 5, "jun": 6, "jul": 7, "aug": 8,
-    "sep": 9, "okt": 10, "nov": 11, "dec": 12
+    "may": 5, "jun": 6, "jul": 7, "aug": 8,
+    "sep": 9, "oct": 10, "nov": 11, "dec": 12
 }
 
-# skapa månad per rad
-def extract_month_index(datum_series):
+# Create month index for each row
+def extract_month_index(date_series):
     month_idx = []
     current_month = 0
-    for d in datum_series:
-        for name, num in månader.items():
+
+    for d in date_series:
+        for name, num in months.items():
             if name in d:
                 current_month = num
                 break
+
         month_idx.append(current_month - 1)  # index 0–11
+
     return np.array(month_idx)
-month_idx = extract_month_index(Datum)
 
-
-# --------------------
-# BERÄKNAR ALR
-# --------------------
-yta = 27 * 100 * 100 # [m2] AREA på Ekeby
-ALR = (Q.values * (1 / (24 * 3600)) * C_N_månad[month_idx]) / yta # [kg/(dag*m2)]
+month_idx = extract_month_index(Date)
 
 # --------------------
-# PLOT FUNKTION
+# CALCULATE ALR
+# --------------------
+area = 27 * 100 * 100  # [m2] Area of Ekeby
+
+ALR = (
+    Q.values *
+    (1 / (24 * 3600)) *
+    C_N_month[month_idx]
+) / area  # [kg/(day*m2)]
+
+# --------------------
+# PLOTTING FUNCTION
 # --------------------
 def scatter_plot(x, y, xlabel, ylabel, title=None):
     plt.scatter(x, y)
     plt.axhline(0, linewidth=1)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+
     if title:
         plt.title(title)
+
     plt.show()
 
 # --------------------
 # INITIAL PLOT
 # --------------------
-scatter_plot(Q, ALR, "Q [m3/dag]", "ALR [kg/(d*m2)]")
+scatter_plot(Q, ALR, "Q [m3/day]", "ALR [kg/(d*m2)]")
 
 # --------------------
-# IQR FILRTRERINGSFUNKTION
+# IQR FILTER FUNCTION
 # --------------------
 def iqr_filter(x, y):
     q1, q3 = np.quantile(y, [0.25, 0.75])
     iqr = q3 - q1
+
     lower = q1 - 1.5 * iqr
     upper = q3 + 1.5 * iqr
+
     mask = (y >= lower) & (y <= upper)
+
     return x[mask], y[mask], lower, upper
 
-# filtrera
+# Filter outliers
 x_f, y_f, low, high = iqr_filter(Q.values, ALR)
-scatter_plot(x_f, y_f, "Q [m3/dag]", "ALR [kg/(d*m2)]", "Filtrerade värden")
-# % borttagna
-print("\nAmount of removed outliers of ALR:",round((1 - len(y_f)/len(ALR)) * 100,2), "%")
 
+scatter_plot(
+    x_f,
+    y_f,
+    "Q [m3/day]",
+    "ALR [kg/(d*m2)]",
+    "Filtered values"
+)
+
+# Percentage removed
+print(
+    "\nAmount of removed ALR outliers:",
+    round((1 - len(y_f) / len(ALR)) * 100, 2),
+    "%"
+)
 
 # --------------------
-# KVARTILER
+# QUARTILES
 # --------------------
 q50 = np.quantile(y_f, 0.5)
 q25 = np.quantile(y_f, 0.25)
@@ -109,41 +146,72 @@ mask_q25 = y_f < q25
 x_q50, y_q50 = x_f[mask_q50], y_f[mask_q50]
 x_q25, y_q25 = x_f[mask_q25], y_f[mask_q25]
 
+# --------------------
+# AVERAGES
+# --------------------
+# print("ALR_mean:", np.mean(y_f))
+
+print("ALR_mean_q50, lower half:", np.mean(y_q50))
+print("ALR_mean_q25, lower 25%:", np.mean(y_q25))
+print("REFERENCE: ALR_mean:", np.mean(y_f))
 
 # --------------------
-# MEDELVÄRDEN
+# Ekeby Wetland (Hydraulic Retention Time)
 # --------------------
-#print("ALR_medel:", np.mean(y_f))
-print("ALR_medel_q50, undre halvan:", np.mean(y_q50))
-print("ALR_medel_q25, undre 25%", np.mean(y_q25))
-print("REFERENS: ALR_medel", np.mean(y_f))
-
-
-# --------------------
-# Ekeby våtmark (Uppbehållstid)
-# --------------------
-# Konverteringsfaktor för Ekeby våtmark
+# Conversion factor for Ekeby wetland
 
 q1, q3 = np.quantile(Q, [0.25, 0.75])
 iqr = q3 - q1
+
 lower = q1 - 1.5 * iqr
 upper = q3 + 1.5 * iqr
+
 filtered_Q_Ekeby = Q[(Q > lower) & (Q < upper)]
 
-#delar upp i kvantiler
+# Split into quantiles
 Q_q50_Ekeby_limit = np.quantile(filtered_Q_Ekeby, 0.5)
-Q_q50_Ekeby = filtered_Q_Ekeby[filtered_Q_Ekeby > Q_q50_Ekeby_limit] # m3/s
 
-print("Amount of removed outliers of Q_Ekeby",round((len(Q)-len(filtered_Q_Ekeby))/len(Q)*100, 2), "%")
+Q_q50_Ekeby = filtered_Q_Ekeby[
+    filtered_Q_Ekeby > Q_q50_Ekeby_limit
+]
 
+print(
+    "Amount of removed Q_Ekeby outliers:",
+    round(
+        (len(Q) - len(filtered_Q_Ekeby)) /
+        len(Q) * 100,
+        2
+    ),
+    "%"
+)
 
 # --------------------
-# Actual Residual time for Ekeby wetlan WHEN epsilon=1 & WITHOUT "smart design"
+# Actual retention time for Ekeby wetland
+# when epsilon = 1 and without "smart design"
 # --------------------
-h_avg=1
-A_Ekeby = 27 * 100 * 100 # [m2]
-t_Ekeby = h_avg*A_Ekeby/((np.mean(Q_q50_Ekeby)/24)) #[m]*[m2]/[m3/h]
-print("Antal timmar Ekeby har i upphållstid med en nerskalad modell",round(t_Ekeby,1),"h")
-print("Antal timmar Ekeby har i upphållstid i verkligheten ~",round(6*24),"h")
-print("skalningsfaktor Ekeby:",(6*24)/t_Ekeby)
+h_avg = 1
+
+A_Ekeby = 27 * 100 * 100  # [m2]
+
+t_Ekeby = (
+    h_avg * A_Ekeby /
+    (np.mean(Q_q50_Ekeby) / 24)
+)  # [m] * [m2] / [m3/h]
+
+print(
+    "Retention time in the scaled-down Ekeby model:",
+    round(t_Ekeby, 1),
+    "h"
+)
+
+print(
+    "Retention time in the real Ekeby wetland ~",
+    round(6 * 24),
+    "h"
+)
+
+print(
+    "Scaling factor for Ekeby:",
+    round((6 * 24) / t_Ekeby,5)
+)
 
