@@ -62,6 +62,22 @@ calculation_of_area.py
 
 located in the main branch of the repository.
 
+## Repository Structure
+
+```text
+.
+├── README.md
+├── 7048_Monthly_values.xlsx
+├── 7048_Volumetric_flow.xlsx
+├── 7133_Monthly_values.xlsx
+├── 7133_Volumetric_flow.xlsx
+├── 7585_Monthly_values.xlsx
+├── 7585_Volumetric_flow.xlsx
+├── 7772_Monthly_values.xlsx
+├── 7772_Volumetric_flow.xlsx
+└── ...
+```
+
 ## Authors
 
 The datasets were generated and processed by the authors of the bachelor's thesis for use in the wetland sizing and evaluation analyses.
