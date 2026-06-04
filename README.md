@@ -22,8 +22,11 @@ The script `calculation_of_ekeby_alr_value.py` uses the following input files:
 * `Reningsgrad, Ptot, BOD och Ntot.xlsx`
 * `Flöde_202601010245.xlsx`
 
-These datasets were measured and provided by Ekeby Wetland.
+These datasets were measured and provided by Ekeby Wetland and can be found in the branch:
 
+```text
+input-data
+```
 The script calculates an ALR value that serves as a key parameter in the thesis.
 
 ## Wetland Area Analysis
@@ -41,7 +44,11 @@ The script also uses two other input files:
 * `Degree_of_purification.xlsx`
 * `Reningsgrad, Ptot, BOD och Ntot.xlsx`
 
-The first daset is a rework of `Reningsgrad, Ptot, BOD och Ntot.xlsx`. And the last dataset was created by calculating the cost of the analyzed areas. (The last file needs to be changed if new areas a chosen) 
+The first daset is a rework of `Reningsgrad, Ptot, BOD och Ntot.xlsx`. And the last dataset was created by calculating the cost of the analyzed areas. (The last file needs to be changed if new areas a chosen) Both datasets can be found in the branch:
+
+```text
+input-data
+```
 
 ## Repository Structure
 
