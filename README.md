@@ -53,14 +53,33 @@ Both datasets can be found in the following branch:
 input-data
 ```
 
-## Repository Structure
+## Repository Organization
+
+The repository is organized into three branches:
 
 ```text
-.
-├── README.md
-├── calculation_of_ekeby_alr_value.py
-└── calculation_of_area.py
+main
+├── Python scripts
+└── Main README
+
+input-data
+├── Flöde_202601010245.xlsx
+├── Reningsgrad, Ptot, BOD och Ntot.xlsx
+├── Degree_of_purification.xlsx
+└── Calculated_costs.xlsx
+
+wetland-area-data
+├── 7048_Monthly_values.xlsx
+├── 7048_Volumetric_flow.xlsx
+├── 7133_Monthly_values.xlsx
+├── 7133_Volumetric_flow.xlsx
+└── ...
 ```
+
+* **main** contains all Python code used in the analyses.
+* **input-data** contains datasets required as inputs to the scripts.
+* **wetland-area-data** contains the simulated datasets for the candidate wetland areas identified through the GIS analysis.
+
 
 ## Authors
 
