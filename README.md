@@ -1,4 +1,4 @@
-# Identification and Dimensioning of Wetlands for Reduced Eutrophication in the Stockholm, Sweden.
+# Identification and Dimensioning of Wetlands for Reduced Eutrophication in Stockholm, Sweden.
 
 ## Overview
 
