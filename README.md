@@ -25,6 +25,20 @@ Example:
 | `7585_Volumetric_flow.xlsx` | Simulated volumetric flow data for area 7585.                         |
 | ...                         | Additional candidate wetland areas follow the same naming convention. |
 
+## Data Origin
+
+The datasets contained in this branch originate from model outputs generated using SMHI's S-HYPE hydrological model.
+
+The data were downloaded from SMHI Vattenwebb's "Model Data per Area" service:
+
+https://vattenwebb.smhi.se/modelarea/
+
+S-HYPE (HYdrological Predictions for the Environment) is a hydrological model developed by SMHI and used to simulate water flow and nutrient transport within Swedish catchments. The model provides estimates of water quantity and water quality variables for individual sub-catchments throughout Sweden.
+
+For each candidate wetland area, monthly nutrient transport data and volumetric flow data were downloaded and processed for use in the wetland sizing analysis presented in the bachelor's thesis. The datasets included in this branch are therefore derived from S-HYPE model outputs rather than direct field measurements.
+
+
+
 ## Naming Convention
 
 Files follow the structure:
