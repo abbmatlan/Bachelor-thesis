@@ -33,7 +33,7 @@ The script `calculation_of_area.py` is the primary script used in the study. It 
 Data describing each individual wetland area can be found in the branch:
 
 ```text
-DATA_For_Wetland_Areas
+wetland-area-data
 ```
 within this repository.
 
