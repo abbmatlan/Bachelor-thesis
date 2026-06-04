@@ -35,8 +35,13 @@ Data describing each individual wetland area can be found in the branch:
 ```text
 DATA_For_Wetland_Areas
 ```
-
 within this repository.
+
+The script also uses two other input files:
+* `Degree_of_purification.xlsx`
+* `Reningsgrad, Ptot, BOD och Ntot.xlsx`
+
+The first daset is a rework of `Reningsgrad, Ptot, BOD och Ntot.xlsx`. And the last dataset was created by calculating the cost of the analyzed areas. This file needs to be changed if new areas a chosen. 
 
 ## Repository Structure
 
