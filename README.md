@@ -27,6 +27,7 @@ These datasets were measured and provided by Ekeby Wetland and can be found in t
 ```text
 input-data
 ```
+within this repository.
 The script calculates an ALR value that serves as a key parameter in the thesis.
 
 ## Wetland Area Analysis
@@ -44,11 +45,12 @@ The script also uses two other input files:
 * `Degree_of_purification.xlsx`
 * `Reningsgrad, Ptot, BOD och Ntot.xlsx`
 
-The first daset is a rework of `Reningsgrad, Ptot, BOD och Ntot.xlsx`. And the last dataset was created by calculating the cost of the analyzed areas. (The last file needs to be changed if new areas a chosen) Both datasets can be found in the branch:
+The first daset is a rework of `Reningsgrad, Ptot, BOD och Ntot.xlsx`. And the last dataset was created by calculating the cost of the analyzed areas (the last file needs to be changed if new areas a chosen). Both datasets can be found in the branch:
 
 ```text
 input-data
 ```
+within this repository.
 
 ## Repository Structure
 
