@@ -1,12 +1,12 @@
-# Identification and Dimensioning of Wetlands for Reduced Eutrophication in Stockholm, Sweden.
+# Identification and Dimensioning of Wetlands for Reduced Eutrophication in Stockholm, Sweden
 
 ## Overview
 
 This repository contains all code and data used in the bachelor's thesis *"Identifiering och dimensionering av våtmarker för minskad övergödning"*.
 
-All code was developed exclusively by the authors and forms a significant part of the analyses and results presented in the thesis.
+All code was developed exclusively by the authors and constitutes a significant part of the analyses and results presented in the thesis.
 
-The repository contains two Python scripts that constitute the core of the computational work.
+The repository contains two Python scripts that form the core of the computational work.
 
 ## Files
 
@@ -22,35 +22,36 @@ The script `calculation_of_ekeby_alr_value.py` uses the following input files:
 * `Reningsgrad, Ptot, BOD och Ntot.xlsx`
 * `Flöde_202601010245.xlsx`
 
-These datasets were measured and provided by Ekeby Wetland and can be found in the branch:
+These datasets were measured and provided by Ekeby Wetland and can be found in the following branch:
 
 ```text
 input-data
 ```
-within this repository.
-The script calculates an ALR value that serves as a key parameter in the thesis.
+
+The script calculates an ALR value that serves as a key parameter throughout the thesis.
 
 ## Wetland Area Analysis
 
 The script `calculation_of_area.py` is the primary script used in the study. It utilizes the ALR value calculated by `calculation_of_ekeby_alr_value.py` together with datasets containing simulated flow rates and nutrient concentrations for the candidate wetland areas identified through the GIS analysis.
 
-Data describing each individual wetland area can be found in the branch:
+Data describing each individual wetland area can be found in the following branch:
 
 ```text
 wetland-area-data
 ```
-within this repository.
 
-The script also uses two other input files:
+The script also uses two additional input files:
+
 * `Degree_of_purification.xlsx`
 * `Reningsgrad, Ptot, BOD och Ntot.xlsx`
 
-The first daset is a rework of `Reningsgrad, Ptot, BOD och Ntot.xlsx`. And the last dataset was created by calculating the cost of the analyzed areas (the last file needs to be changed if new areas a chosen). Both datasets can be found in the branch:
+The first dataset is a reworked version of `Reningsgrad, Ptot, BOD och Ntot.xlsx`. The second dataset was created by calculating the costs of the analyzed areas. This file must be updated if new areas are selected for analysis.
+
+Both datasets can be found in the following branch:
 
 ```text
 input-data
 ```
-within this repository.
 
 ## Repository Structure
 
@@ -64,4 +65,3 @@ within this repository.
 ## Authors
 
 All code and analyses contained in this repository were developed by the authors of the bachelor's thesis.
-
